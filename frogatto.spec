@@ -1,5 +1,5 @@
 Name:           frogatto
-Version:        1.0.2
+Version:        1.0.3
 Release:        1%{?dist}
 Summary:        An old-school 2D platform game
 
@@ -112,6 +112,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Sat Sep 25 2010 Andrea Musuruane <musuruan@gmail.com> 1.0.3-1
+- Updated to upstream 1.0.3
+
 * Sat Sep 04 2010 Andrea Musuruane <musuruan@gmail.com> 1.0.2-1
 - Updated to upstream 1.0.2
 
