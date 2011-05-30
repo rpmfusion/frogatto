@@ -1,6 +1,6 @@
 Name:           frogatto
 Version:        1.0.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        An old-school 2D platform game
 
 Group:          Amusements/Games
@@ -13,6 +13,7 @@ Source2:        %{name}.desktop
 Source3:        %{name}.xpm
 Source4:        %{name}.pod
 Patch0:         %{name}-1.0-Makefile.patch
+Patch1:         %{name}-1.0.3-gcc-4.6.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  SDL-devel >= 1.2.7
@@ -42,6 +43,7 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 
 %build
@@ -112,6 +114,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Mon May 30 2011 Hans de Goede <j.w.r.degoede@gmail.com> - 1.0.3-3
+- Rebuilt for new boost (rf#1773)
+
 * Thu Oct 14 2010 Nicolas Chauvet <kwizart@gmail.com> - 1.0.3-2
 - Rebuilt for gcc bug
 

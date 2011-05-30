@@ -1,0 +1,12 @@
+diff -up frogatto-1.0.3/src/controls.hpp~ frogatto-1.0.3/src/controls.hpp
+--- frogatto-1.0.3/src/controls.hpp~	2010-07-27 17:33:39.000000000 +0200
++++ frogatto-1.0.3/src/controls.hpp	2011-05-30 10:58:10.027045952 +0200
+@@ -2,7 +2,7 @@
+ #define CONTROLS_HPP_INCLUDED
+ 
+ #include <vector>
+-
++#include <cstdio>
+ #include <SDL_keysym.h>
+ 
+ namespace controls {
