@@ -1,6 +1,6 @@
 Name:           frogatto
-Version:        1.0.3
-Release:        3%{?dist}
+Version:        1.1
+Release:        1%{?dist}
 Summary:        An old-school 2D platform game
 
 Group:          Amusements/Games
@@ -12,8 +12,8 @@ Source1:        %{name}.sh
 Source2:        %{name}.desktop
 Source3:        %{name}.xpm
 Source4:        %{name}.pod
-Patch0:         %{name}-1.0-Makefile.patch
-Patch1:         %{name}-1.0.3-gcc-4.6.patch
+# Patch Makefile not to link lSDLmain
+Patch0:         %{name}-1.1-Makefile.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  SDL-devel >= 1.2.7
@@ -43,7 +43,9 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+
+# Fix locale file path
+sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
 
 
 %build
@@ -64,6 +66,10 @@ install -d %{buildroot}%{_datadir}/%{name}
 cp -pr data images music sounds \
   %{buildroot}%{_datadir}/%{name}
 
+# Install translations
+install -d %{buildroot}%{_datadir}/locale
+cp -pr locale %{buildroot}%{_datadir}
+
 # Install desktop file
 install -d %{buildroot}%{_datadir}/applications
 desktop-file-install \
@@ -81,6 +87,8 @@ pod2man --section=6 \
   -release="%{name} %{version}" \
   -date="July 13th, 2010" \
   %{SOURCE4} > %{buildroot}%{_mandir}/man6/%{name}.6
+
+%find_lang %{name}
 
 
 %clean
@@ -102,7 +110,7 @@ fi
 gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %{_bindir}/%{name}
 %{_datadir}/%{name}
@@ -114,6 +122,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Sat Jun 11 2011 Andrea Musuruane <musuruan@gmail.com> 1.1-1
+- Updated to upstream 1.1
+
 * Mon May 30 2011 Hans de Goede <j.w.r.degoede@gmail.com> - 1.0.3-3
 - Rebuilt for new boost (rf#1773)
 
