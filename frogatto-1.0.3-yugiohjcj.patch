@@ -1,0 +1,73 @@
+diff -cr frogatto-1.0.3/src/joystick.cpp frogatto-1.0.3-patched/src/joystick.cpp
+*** frogatto-1.0.3/src/joystick.cpp	2010-08-04 22:09:20.000000000 +0200
+--- frogatto-1.0.3-patched/src/joystick.cpp	2011-03-20 17:43:01.000000000 +0100
+***************
+*** 55,60 ****
+--- 55,65 ----
+  					return true;
+  			}
+  		}
++ 		const Sint16 state1 = SDL_JoystickGetAxis(j, 1);
++ 		if(state1 < -32000)
++ 		{
++ 			return true;
++ 		}
+  
+  	}
+  
+***************
+*** 77,83 ****
+  					return true;
+  			}
+  		}
+! 
+  	}
+  
+  	return false;
+--- 82,92 ----
+  					return true;
+  			}
+  		}
+! 		const Sint16 state1 = SDL_JoystickGetAxis(j, 1);
+! 		if(state1 > 32000)
+! 		{
+! 			return true;
+! 		}
+  	}
+  
+  	return false;
+***************
+*** 99,105 ****
+  					return true;
+  			}
+  		}
+! 
+  	}
+  
+  	return false;
+--- 108,118 ----
+  					return true;
+  			}
+  		}
+! 		const Sint16 state1 = SDL_JoystickGetAxis(j, 0);
+! 		if(state1 < -32000)
+! 		{
+! 			return true;
+! 		}
+  	}
+  
+  	return false;
+***************
+*** 121,126 ****
+--- 134,144 ----
+  					return true;
+  			}
+  		}
++ 		const Sint16 state1 = SDL_JoystickGetAxis(j, 0);
++ 		if(state1 > 32000)
++ 		{
++ 			return true;
++ 		}
+  	}
+  
+  	return false;
