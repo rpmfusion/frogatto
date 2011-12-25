@@ -1,5 +1,5 @@
 Name:           frogatto
-Version:        1.1.1
+Version:        1.2
 Release:        1%{?dist}
 Summary:        An old-school 2D platform game
 
@@ -7,13 +7,19 @@ Group:          Amusements/Games
 # Artwork and music not released under an open license
 License:        GPLv3+ and proprietary
 URL:            http://www.frogatto.com/
-Source0:        http://www.frogatto.com/files/%{name}-%{version}.tar.bz2
+# You can get this tarball from:
+# https://github.com/frogatto/frogatto/tarball/1.2
+Source0:        frogatto-frogatto-1.2-0-g07a33cd.tar.gz
 Source1:        %{name}.sh
 Source2:        %{name}.desktop
 Source3:        %{name}.xpm
 Source4:        %{name}.pod
 # Patch Makefile not to link lSDLmain
-Patch0:         %{name}-1.1-Makefile.patch
+Patch0:         %{name}-1.2-Makefile.patch
+# Add joystick support for
+# Microsoft X-Box 360 pad and Microsoft SideWinder Game Pad USB
+# http://yugiohjcj.1s.fr/
+Patch1:         %{name}-1.0.3-yugiohjcj.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  SDL-devel >= 1.2.7
@@ -41,8 +47,9 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{name}-64c84bf
 %patch0 -p1
+%patch1 -p1
 
 # Fix locale file path
 sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
@@ -122,6 +129,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Sun Dec 25 2011 Andrea Musuruane <musuruan@gmail.com> 1.2-1
+- Updated to upstream 1.2
+- Added a patch by YuGiOhJCJ to add joystick support for Microsoft X-Box 
+  360 pad and Microsoft SideWinder Game Pad USB
+
 * Sat Jul 16 2011 Andrea Musuruane <musuruan@gmail.com> 1.1.1-1
 - Updated to upstream 1.1.1
 
