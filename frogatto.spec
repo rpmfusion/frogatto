@@ -1,6 +1,6 @@
 Name:           frogatto
 Version:        1.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An old-school 2D platform game
 
 Group:          Amusements/Games
@@ -129,6 +129,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Thu Feb 09 2012 Nicolas Chauvet <kwizart@gmail.com> - 1.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Sun Dec 25 2011 Andrea Musuruane <musuruan@gmail.com> 1.2-1
 - Updated to upstream 1.2
 - Added a patch by YuGiOhJCJ to add joystick support for Microsoft X-Box 
