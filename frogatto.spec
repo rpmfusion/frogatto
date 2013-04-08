@@ -1,6 +1,6 @@
 Name:           frogatto
 Version:        1.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An old-school 2D platform game
 
 Group:          Amusements/Games
@@ -24,7 +24,7 @@ BuildRequires:  glew-devel
 BuildRequires:  libpng-devel
 BuildRequires:  ccache
 BuildRequires:  boost-devel
-BuildRequires:  perl
+BuildRequires:  perl-podlators
 BuildRequires:  desktop-file-utils 
 Requires:       hicolor-icon-theme
 
@@ -117,6 +117,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Mon Apr  8 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.1-2
+- Explicitly BuildRequires perl-podlators for manpage generation
+
 * Mon Apr  8 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.1-1
 - Rebase to upstream 1.3.1 release
 - Rebuild for new boost and glew
