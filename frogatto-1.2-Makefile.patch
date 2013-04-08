@@ -1,16 +1,12 @@
-diff -durN frogatto-frogatto-64c84bf.orig/Makefile frogatto-frogatto-64c84bf/Makefile
---- frogatto-frogatto-64c84bf.orig/Makefile	2011-11-30 06:31:31.000000000 +0100
-+++ frogatto-frogatto-64c84bf/Makefile	2011-12-25 16:49:42.639667432 +0100
-@@ -9,10 +9,10 @@
- 	$(CXX) -DIMPLEMENT_SAVE_PNG -fno-inline-functions -g $(OPT) `sdl-config --cflags` -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Wreturn-type -fthreadsafe-statics -c $<
+diff -up frogatto-1.3.1/Makefile~ frogatto-1.3.1/Makefile
+--- frogatto-1.3.1/Makefile~	2012-12-08 23:36:13.000000000 +0100
++++ frogatto-1.3.1/Makefile	2013-04-08 09:50:59.035587574 +0200
+@@ -40,7 +40,7 @@ BASE_CXXFLAGS += -g -fno-inline-function
+ INC := $(shell pkg-config --cflags x11 sdl glu glew SDL_image libpng zlib)
  
- game: $(objects)
--	$(CXX) -g $(OPT) -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Wreturn-type $(objects) -o game -L. -L/sw/lib -L. -L/usr/lib `sdl-config --libs` -lSDLmain -lSDL -lGL -lGLU -lGLEW -lSDL_image -lSDL_ttf -lSDL_mixer -lpng -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
-+	$(CXX) -g $(OPT) -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Wreturn-type $(objects) -o game -L. -L/sw/lib -L. -L/usr/lib `sdl-config --libs` -lSDL -lGL -lGLU -lGLEW -lSDL_image -lSDL_ttf -lSDL_mixer -lpng -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
+ # Linker library options.
+-LIBS := $(shell pkg-config --libs x11 ) -lSDLmain \
++LIBS := $(shell pkg-config --libs x11 ) \
+ 	$(shell pkg-config --libs sdl glu glew SDL_image libpng zlib) -lSDL_ttf -lSDL_mixer
  
- server: $(server_objects)
--	$(CXX) -fno-inline-functions -g $(OPT) -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Wreturn-type -fthreadsafe-statics $(server_objects) -o server -L/sw/lib -L/usr/lib `sdl-config --libs` -lSDLmain -lSDL -lGL -lGLU -lSDL_image -lSDL_ttf -lSDL_mixer -lboost_regex-mt -lboost_system-mt -lboost_thread-mt -lboost_iostreams-mt
-+	$(CXX) -fno-inline-functions -g $(OPT) -D_GNU_SOURCE=1 -D_REENTRANT -Wnon-virtual-dtor -Wreturn-type -fthreadsafe-statics $(server_objects) -o server -L/sw/lib -L/usr/lib `sdl-config --libs` -lSDL -lGL -lGLU -lSDL_image -lSDL_ttf -lSDL_mixer -lboost_regex-mt -lboost_system-mt -lboost_thread-mt -lboost_iostreams-mt
- 
- formula_test: $(formula_test_objects)
- 	$(CXX) -O2 -g -I/usr/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT -DUNIT_TEST_FORMULA -Wnon-virtual-dtor -Wreturn-type src/formula.cpp $(formula_test_objects) -o test -L/usr/lib -lSDL -lGL -lGLU -lSDL_image -lSDL_ttf -lSDL_mixer -lboost_regex
+ include Makefile.common
