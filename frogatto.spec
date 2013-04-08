@@ -1,26 +1,19 @@
 Name:           frogatto
-Version:        1.2
-Release:        4%{?dist}
+Version:        1.3.1
+Release:        1%{?dist}
 Summary:        An old-school 2D platform game
 
 Group:          Amusements/Games
 # Artwork and music not released under an open license
 License:        GPLv3+ and proprietary
 URL:            http://www.frogatto.com/
-# You can get this tarball from:
-# https://github.com/frogatto/frogatto/tarball/1.2
-Source0:        frogatto-frogatto-1.2-0-g07a33cd.tar.gz
+Source0:        https://github.com/frogatto/frogatto/archive/1.3.1.tar.gz
 Source1:        %{name}.sh
 Source2:        %{name}.desktop
 Source3:        %{name}.xpm
 Source4:        %{name}.pod
 # Patch Makefile not to link lSDLmain
 Patch0:         %{name}-1.2-Makefile.patch
-# Add joystick support for
-# Microsoft X-Box 360 pad and Microsoft SideWinder Game Pad USB
-# http://yugiohjcj.1s.fr/
-Patch1:         %{name}-1.0.3-yugiohjcj.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  SDL-devel >= 1.2.7
 BuildRequires:  SDL_image-devel
@@ -47,21 +40,19 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 
 
 %prep
-%setup -q -n %{name}-%{name}-64c84bf
+%setup -q
 %patch0 -p1
-%patch1 -p1
 
 # Fix locale file path
 sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
 
 
 %build
-make OPT="$RPM_OPT_FLAGS" %{?_smp_mflags}
+make %{?_smp_mflags} \
+  BASE_CXXFLAGS="$RPM_OPT_FLAGS -fno-inline-functions -fthreadsafe-statics"
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # Install wrapper script
 install -d %{buildroot}%{_bindir}
 install -m 755 -p %{SOURCE1} %{buildroot}%{_bindir}/%{name}
@@ -69,13 +60,15 @@ install -m 755 -p %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 # Install game and data
 install -d %{buildroot}%{_libexecdir}/%{name}
 install -m 755 -p game %{buildroot}%{_libexecdir}/%{name}
-install -d %{buildroot}%{_datadir}/%{name}
-cp -pr data images music sounds \
+install -d %{buildroot}%{_datadir}/%{name}/modules/%{name}
+cp -pr data images music *.cfg \
   %{buildroot}%{_datadir}/%{name}
-
-# Install translations
-install -d %{buildroot}%{_datadir}/locale
-cp -pr locale %{buildroot}%{_datadir}
+pushd modules/%{name}
+cp -pr data images music sounds *.cfg \
+  %{buildroot}%{_datadir}/%{name}/modules/%{name}
+  # Install translations
+  cp -pr locale %{buildroot}%{_datadir}
+popd
 
 # Install desktop file
 install -d %{buildroot}%{_datadir}/applications
@@ -98,10 +91,6 @@ pod2man --section=6 \
 %find_lang %{name}
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %post
 touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
@@ -118,17 +107,20 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %files -f %{name}.lang
-%defattr(-,root,root,-)
+%doc modules/%{name}/CHANGELOG LICENSE
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_libexecdir}/%{name}
 %{_datadir}/icons/hicolor/*/apps/%{name}.xpm
 %{_datadir}/applications/%{name}.desktop
 %{_mandir}/man6/%{name}.6*
-%doc CHANGELOG LICENSE
 
 
 %changelog
+* Mon Apr  8 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.1-1
+- Rebase to upstream 1.3.1 release
+- Rebuild for new boost and glew
+
 * Thu Nov 01 2012 Nicolas Chauvet <kwizart@gmail.com> - 1.2-4
 - Rebuilt
 
