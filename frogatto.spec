@@ -1,6 +1,6 @@
 Name:           frogatto
 Version:        1.3.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        An old-school 2D platform game
 
 Group:          Amusements/Games
@@ -14,6 +14,8 @@ Source3:        %{name}.xpm
 Source4:        %{name}.pod
 # Patch Makefile not to link lSDLmain
 Patch0:         %{name}-1.2-Makefile.patch
+# boost no longer has separate non mt and -mt variants of its libs
+Patch1:         %{name}-1.3-no-boost-mt.patch
 
 BuildRequires:  SDL-devel >= 1.2.7
 BuildRequires:  SDL_image-devel
@@ -42,6 +44,7 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 # Fix locale file path
 sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
@@ -117,6 +120,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Mon Aug 26 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.1-3
+- Rebuild for new boost
+
 * Mon Apr  8 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.1-2
 - Explicitly BuildRequires perl-podlators for manpage generation
 
