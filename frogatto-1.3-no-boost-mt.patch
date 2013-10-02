@@ -1,0 +1,12 @@
+diff -up frogatto-1.3.1/Makefile~ frogatto-1.3.1/Makefile
+--- frogatto-1.3.1/Makefile~	2013-08-26 20:05:43.000000000 +0200
++++ frogatto-1.3.1/Makefile	2013-08-26 20:11:04.507451694 +0200
+@@ -60,7 +60,7 @@ game: $(objects)
+ 	$(CCACHE) $(CXX) \
+ 		$(BASE_CXXFLAGS) $(LDFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(INC) \
+ 		$(objects) -o game \
+-		$(LIBS) -lboost_regex-mt -lboost_system-mt -lpthread -fthreadsafe-statics
++		$(LIBS) -lboost_regex -lboost_system -lpthread -fthreadsafe-statics
+ 
+ # pull in dependency info for *existing* .o files
+ -include $(objects:.o=.d)
