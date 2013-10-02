@@ -1,0 +1,34 @@
+Description: Use FreeFont instead of the Ubuntu Font Family
+ Use the FreeFont instead of Ubuntu one, as the later one is not
+ compatible with DFSG (see e.g. #603157). This also fixes an issue
+ in loading the editor, as a relative path was hardcoded then.
+Forwarded: no
+Author: Martin Quinson <mquinson@debian.org>
+Last-Update: 2013-01-26
+
+Index: frogatto/src/font.cpp
+===================================================================
+--- frogatto.orig/src/font.cpp	2013-01-12 20:49:22.049472442 +0100
++++ frogatto/src/font.cpp	2013-01-26 22:44:45.390874240 +0100
+@@ -20,7 +20,7 @@
+ #endif
+ 
+ namespace {
+-const char* FontFile = "UbuntuMono-R.ttf";
++const char* FontFile = "/usr/share/fonts/gnu-free/FreeMono.ttf";
+ 
+ std::map<int, TTF_Font*> font_table;
+ 
+Index: frogatto/src/vector_text.cpp
+===================================================================
+--- frogatto.orig/src/vector_text.cpp	2013-01-12 20:49:22.125473580 +0100
++++ frogatto/src/vector_text.cpp	2013-01-26 22:45:35.918522864 +0100
+@@ -13,7 +13,7 @@
+ 	: text_(i18n::tr(node["text"].as_string())), 
+ 	visible_(node["visible"].as_bool(true)),
+ 	size_(node["size"].as_int(12)),
+-	font_(node["font"].as_string_default("UbuntuMono-R"))
++	font_(node["font"].as_string_default("FreeMono"))
+ {
+ 	std::vector<int> r = node["rect"].as_list_int();
+ 	draw_area_ = rect(r[0], r[1], r[2], r[3]);
