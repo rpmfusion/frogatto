@@ -1,19 +1,24 @@
+%global commit a7ef3bfa0c32df4852bf057fab969c1a080edf4d
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
 Name:           frogatto
-Version:        1.3.1
-Release:        2%{?dist}
+Version:        1.3.3
+Release:        1%{?dist}
 Summary:        An old-school 2D platform game
 
-Group:          Amusements/Games
 # Artwork and music not released under an open license
 License:        GPLv3+ and proprietary
 URL:            http://www.frogatto.com/
-Source0:        https://github.com/frogatto/frogatto/archive/1.3.1.tar.gz
+Source0:        https://github.com/frogatto/frogatto/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 Source1:        %{name}.sh
 Source2:        %{name}.desktop
-Source3:        %{name}.xpm
-Source4:        %{name}.pod
+Source3:        %{name}.pod
 # Patch Makefile not to link lSDLmain
 Patch0:         %{name}-1.2-Makefile.patch
+# Boost no longer has separate non mt and -mt variants of its libs
+Patch1:         %{name}-1.3-no-boost-mt.patch
+# Use FreeFont instead of the Ubuntu Font Family
+Patch2:         %{name}-1.3-fonts.patch
 
 BuildRequires:  SDL-devel >= 1.2.7
 BuildRequires:  SDL_image-devel
@@ -25,6 +30,8 @@ BuildRequires:  libpng-devel
 BuildRequires:  ccache
 BuildRequires:  boost-devel
 BuildRequires:  perl-podlators
+BuildRequires:  gnu-free-mono-fonts
+BuildRequires:  libicns-utils
 BuildRequires:  desktop-file-utils 
 Requires:       hicolor-icon-theme
 
@@ -40,8 +47,10 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 
 
 %prep
-%setup -q
+%setup -qn %{name}-%{commit}
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 # Fix locale file path
 sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
@@ -64,8 +73,8 @@ install -d %{buildroot}%{_datadir}/%{name}/modules/%{name}
 cp -pr data images music *.cfg \
   %{buildroot}%{_datadir}/%{name}
 pushd modules/%{name}
-cp -pr data images music sounds *.cfg \
-  %{buildroot}%{_datadir}/%{name}/modules/%{name}
+  cp -pr data images music sounds *.cfg \
+    %{buildroot}%{_datadir}/%{name}/modules/%{name}
   # Install translations
   cp -pr locale %{buildroot}%{_datadir}
 popd
@@ -76,9 +85,15 @@ desktop-file-install \
   --dir %{buildroot}%{_datadir}/applications \
   %{SOURCE2}
 
-# Install icon 
-install -d %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
-install -m 644 -p %{SOURCE3} %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
+# Extract Mac OS X icons
+icns2png -x modules/%{name}/images/os/mac/icon.icns 
+
+# Install icons
+for i in 16 32 128 256; do
+  install -d -m 755 %{buildroot}%{_datadir}/icons/hicolor/${i}x${i}/apps
+  install -m 644 icon_${i}x${i}x32.png \
+    %{buildroot}%{_datadir}/icons/hicolor/${i}x${i}/apps/%{name}.png
+done
 
 # Install man page
 install -d %{buildroot}%{_mandir}/man6
@@ -86,7 +101,7 @@ pod2man --section=6 \
   -center="RPM Fusion contributed man pages" \
   -release="%{name} %{version}" \
   -date="July 13th, 2010" \
-  %{SOURCE4} > %{buildroot}%{_mandir}/man6/%{name}.6
+  %{SOURCE3} > %{buildroot}%{_mandir}/man6/%{name}.6
 
 %find_lang %{name}
 
@@ -111,12 +126,21 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_libexecdir}/%{name}
-%{_datadir}/icons/hicolor/*/apps/%{name}.xpm
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/applications/%{name}.desktop
 %{_mandir}/man6/%{name}.6*
 
 
 %changelog
+* Wed Sep 25 2013 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-1
+- Updated to upstream v1.3.3 as of Aug 21, 2013
+- Fixed crash when attempting to enter in editor mode (#2966)
+- Used Mac OS X icons
+- Removed Group tag
+
+* Mon Aug 26 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.1-3
+- Rebuild for new boost
+
 * Mon Apr  8 2013 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.1-2
 - Explicitly BuildRequires perl-podlators for manpage generation
 
