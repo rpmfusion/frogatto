@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -30,10 +30,10 @@ BuildRequires:  libpng-devel
 BuildRequires:  ccache
 BuildRequires:  boost-devel
 BuildRequires:  perl-podlators
-BuildRequires:  gnu-free-mono-fonts
 BuildRequires:  libicns-utils
 BuildRequires:  desktop-file-utils 
 Requires:       hicolor-icon-theme
+Requires:       gnu-free-mono-fonts
 
 
 %description
@@ -132,6 +132,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Thu Oct 10 2013 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-2
+- Fixed requiring gnu-free-mono-fonts (again #2966)
+
 * Wed Sep 25 2013 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-1
 - Updated to upstream v1.3.3 as of Aug 21, 2013
 - Fixed crash when attempting to enter in editor mode (#2966)
