@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -132,6 +132,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Sun Mar  2 2014 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.3-3
+- Rebuild for new glew
+
 * Thu Oct 10 2013 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-2
 - Fixed requiring gnu-free-mono-fonts (again #2966)
 
