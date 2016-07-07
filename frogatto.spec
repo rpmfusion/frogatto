@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -19,6 +19,9 @@ Patch0:         %{name}-1.2-Makefile.patch
 Patch1:         %{name}-1.3-no-boost-mt.patch
 # Use FreeFont instead of the Ubuntu Font Family
 Patch2:         %{name}-1.3-fonts.patch
+# Fix gcc6 build only fixes some of the narrowing conversion warnings, there
+# are too many, so we add -Wno-narrowing to the CXXFLAGS as a workaround
+Patch3:         %{name}-1.3-narrowing-conversion-fixes.patch
 
 BuildRequires:  SDL-devel >= 1.2.7
 BuildRequires:  SDL_image-devel
@@ -51,6 +54,7 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # Fix locale file path
 sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
@@ -58,7 +62,7 @@ sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
 
 %build
 make %{?_smp_mflags} \
-  BASE_CXXFLAGS="$RPM_OPT_FLAGS -fno-inline-functions -fthreadsafe-statics"
+  BASE_CXXFLAGS="$RPM_OPT_FLAGS -fno-inline-functions -fthreadsafe-statics -Wno-narrowing"
 
 
 %install
@@ -132,6 +136,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Thu Jul  7 2016 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.3-6
+- Fix building with gcc6 / fix FTBFS
+
 * Mon Sep 01 2014 Sérgio Basto <sergio@serjux.com> - 1.3.3-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 

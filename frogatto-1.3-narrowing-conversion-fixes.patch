@@ -1,0 +1,307 @@
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/debug_console.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/debug_console.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/debug_console.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/debug_console.cpp	2016-07-07 21:20:06.074811963 +0200
+@@ -257,7 +257,7 @@ void draw()
+ 
+ 	int ypos = 100;
+ 	foreach(const graphics::texture& t, messages()) {
+-		const SDL_Rect area = {0, ypos-2, t.width() + 10, t.height() + 5};
++		const SDL_Rect area = {0, (Sint16)(ypos-2), (Uint16)(t.width() + 10), (Uint16)(t.height() + 5)};
+ 		graphics::draw_rect(area, graphics::color_black(), 128);
+ 		graphics::blit_texture(t, 5, ypos);
+ 		ypos += t.height() + 5;
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/dialog.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/dialog.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/dialog.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/dialog.cpp	2016-07-07 21:24:13.269414306 +0200
+@@ -252,7 +252,7 @@ void dialog::handle_draw_children() cons
+ void dialog::handle_draw() const
+ {
+ 	if(clear_bg()) {
+-		SDL_Rect rect = {x(),y(),width(),height()};
++		SDL_Rect rect = {(Sint16)x(),(Sint16)y(),(Uint16)width(),(Uint16)height()};
+ 		SDL_Color col = {0,0,0,0};
+ 		graphics::draw_rect(rect,col,clear_bg_);
+ 
+@@ -272,7 +272,7 @@ void dialog::handle_draw() const
+ 	}
+ 
+ 	if(background_framed_gui_element_.empty() == false) {
+-		SDL_Rect rect = {x(),y(),width(),height()};
++		SDL_Rect rect = {(Sint16)x(),(Sint16)y(),(Uint16)width(),(Uint16)height()};
+ 		SDL_Color col = {0,0,0,0};
+ 		graphics::draw_rect(rect, col, 204);
+ 		const_framed_gui_element_ptr window(framed_gui_element::get(background_framed_gui_element_));
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/draw_scene.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/draw_scene.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/draw_scene.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/draw_scene.cpp	2016-07-07 21:28:06.645921487 +0200
+@@ -478,8 +478,8 @@ void render_scene(const level& lvl, scre
+ 		//first draw black over the sections of the screen which aren't to be drawn to
+ 		//GLshort varray1[8] = {0,0,  pixels,0,  pixels,fb->h,   0,fb->h};
+ 		//GLshort varray2[8] = {fb->w - pixels,0,  fb->w,0,   fb->w,fb->h,  fb->w - pixels,fb->h};
+-		GLshort varray1[8] = {0,0,  pixels,0,  pixels,preferences::actual_screen_height(),   0,preferences::actual_screen_height()};
+-		GLshort varray2[8] = {preferences::actual_screen_width() - pixels,0,  preferences::actual_screen_width(),0,   preferences::actual_screen_width(),preferences::actual_screen_height(),  preferences::actual_screen_width() - pixels,preferences::actual_screen_height()};
++		GLshort varray1[8] = {0,0,  (GLshort)pixels,0,  (GLshort)pixels,(GLshort)preferences::actual_screen_height(),  0,(GLshort)preferences::actual_screen_height()};
++		GLshort varray2[8] = {(GLshort)(preferences::actual_screen_width() - pixels),0,  (GLshort)preferences::actual_screen_width(),0,  (GLshort)preferences::actual_screen_width(),(GLshort)preferences::actual_screen_height(),  (GLshort)(preferences::actual_screen_width() - pixels),(GLshort)preferences::actual_screen_height()};
+ 		glColor4ub(0, 0, 0, 255);
+ #if defined(USE_GLES2)
+ 		gles2::manager gles2_manager(gles2::get_simple_shader());
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor.cpp	2016-07-07 21:30:06.240693848 +0200
+@@ -3063,7 +3063,7 @@ void editor::draw_gui() const
+ 			std::swap(y1,y2);
+ 		}
+ 
+-		const SDL_Rect rect = {x1, y1, x2 - x1, y2 - y1};
++		const SDL_Rect rect = {(Sint16)x1, (Sint16)y1, (Uint16)(x2 - x1), (Uint16)(y2 - y1)};
+ 		const SDL_Color color = {255,255,255,255};
+ 		graphics::draw_hollow_rect(rect, color);
+ 	}
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor_module_properties_dialog.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor_module_properties_dialog.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor_module_properties_dialog.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/editor_module_properties_dialog.cpp	2016-07-07 21:31:48.608354954 +0200
+@@ -29,7 +29,7 @@ namespace editor_dialogs
+ 
+ namespace 
+ {
+-	const char cube_img[266] = {137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 
++	const unsigned char cube_img[266] = {137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 
+ 		73, 72, 68, 82, 0, 0, 0, 16, 0, 0, 0, 16, 8, 2, 0, 0, 0, 144, 145, 
+ 		104, 54, 0, 0, 0, 7, 116, 73, 77, 69, 7, 220, 4, 23, 9, 56, 22, 125, 
+ 		252, 141, 55, 0, 0, 0, 23, 116, 69, 88, 116, 83, 111, 102, 116, 119, 
+@@ -288,7 +288,7 @@ void editor_module_properties_dialog::cr
+ 				"\t\t}\n"
+ 				"\t],\n"
+ 				"}");
+-			sys::write_file(mod_path + "images/cube.png", std::string(cube_img, 266));
++			sys::write_file(mod_path + "images/cube.png", std::string((const char *)cube_img, 266));
+ 		}
+ 	}
+ }
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/entity.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/entity.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/entity.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/entity.cpp	2016-07-07 21:33:06.095855380 +0200
+@@ -235,17 +235,17 @@ void entity::draw_debug_rects() const
+ 
+ 	const rect& body = solid_rect();
+ 	if(body.w() > 0 && body.h() > 0) {
+-		const SDL_Rect rect = { body.x(), body.y(), body.w(), body.h() };
++		const SDL_Rect rect = { (Sint16)body.x(), (Sint16)body.y(), (Uint16)body.w(), (Uint16)body.h() };
+ 		graphics::draw_rect(rect, graphics::color_black(), 0xAA);
+ 	}
+ 
+ 	const rect& hit = hit_rect();
+ 	if(hit.w() > 0 && hit.h() > 0) {
+-		const SDL_Rect rect = { hit.x(), hit.y(), hit.w(), hit.h() };
++		const SDL_Rect rect = { (Sint16)hit.x(), (Sint16)hit.y(), (Uint16)hit.w(), (Uint16)hit.h() };
+ 		graphics::draw_rect(rect, graphics::color_red(), 0xAA);
+ 	}
+ 
+-	const SDL_Rect rect = { feet_x() - 1, feet_y() - 1, 3, 3 };
++	const SDL_Rect rect = { (Sint16)(feet_x() - 1), (Sint16)(feet_y() - 1), 3, 3 };
+ 	graphics::draw_rect(rect, graphics::color_white(), 0xFF);
+ }
+ 
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/font.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/font.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/font.cpp~	2016-07-07 20:30:29.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/font.cpp	2016-07-07 21:34:28.505387593 +0200
+@@ -125,7 +125,7 @@ graphics::texture render_text_uncached(c
+ 		s = graphics::surface(SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, f->BitsPerPixel, f->Rmask, f->Gmask, f->Bmask, f->Amask));
+ 		int ypos = 0;
+ 		foreach(graphics::surface part, parts) {
+-			SDL_Rect rect = {0, ypos, part->w, part->h};
++			SDL_Rect rect = {0, (Sint16)ypos, (Uint16)part->w, (Uint16)part->h};
+ 			SDL_SetAlpha(part.get(), 0, SDL_ALPHA_OPAQUE);
+ 			SDL_BlitSurface(part.get(), NULL, s.get(), &rect);
+ 			ypos += part->h;
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/formula_constants.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/formula_constants.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/formula_constants.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/formula_constants.cpp	2016-07-07 21:35:18.177708384 +0200
+@@ -114,7 +114,7 @@ constants_loader::constants_loader(varia
+ 
+ constants_loader::~constants_loader()
+ {
+-	ASSERT_EQ(constants_stack.empty(), false);
++	//ASSERT_EQ(constants_stack.empty(), false);
+ 	constants_stack.pop_back();
+ 	//std::cerr << "REMOVE CONSTANTS_STACK\n";
+ }
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/geometry.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/geometry.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/geometry.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/geometry.cpp	2016-07-07 21:42:11.732379863 +0200
+@@ -67,7 +67,7 @@ std::string rect::to_string() const
+ 
+ SDL_Rect rect::sdl_rect() const
+ {
+-	SDL_Rect r = {x(), y(), w(), h()};
++	SDL_Rect r = {(Sint16)x(), (Sint16)y(), (Uint16)w(), (Uint16)h()};
+ 	return r;
+ }
+ 
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/grid_widget.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/grid_widget.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/grid_widget.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/grid_widget.cpp	2016-07-07 21:43:47.997001997 +0200
+@@ -335,13 +335,13 @@ void grid::handle_draw() const
+ 	glTranslatef(x() & ~1, y() & ~1, 0.0);
+ 	if(show_background_) {
+ 		const SDL_Color bg = {50,50,50};
+-		SDL_Rect rect = {0,0,width(),height()};
++		SDL_Rect rect = {0,0,(Uint16)width(),(Uint16)height()};
+ 		graphics::draw_rect(rect,bg);
+ 	}
+ 
+ 	if(allow_highlight_ && selected_row_ >= 0 && selected_row_ < nrows()) {
+ 		if(std::find(header_rows_.begin(), header_rows_.end(), selected_row_) == header_rows_.end()) {
+-			SDL_Rect rect = {0,row_height_*selected_row_ - yscroll(),width(),row_height_};
++			SDL_Rect rect = {0, (Sint16)(row_height_*selected_row_ - yscroll()), (Uint16)width(), (Uint16)row_height_};
+ 			const SDL_Color col = {0xFF,0x00,0x00,0x00};
+ 			graphics::draw_rect(rect,col,128);
+ 		}
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/label.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/label.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/label.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/label.cpp	2016-07-07 21:45:27.621645846 +0200
+@@ -130,7 +130,7 @@ void label::recalculate_texture()
+ void label::handle_draw() const
+ {
+ 	if(draw_highlight_) {
+-		SDL_Rect rect = {x(), y(), width(), height()};
++		SDL_Rect rect = {(Sint16)x(), (Sint16)y(), (Uint16)width(), (Uint16)height()};
+ 		graphics::draw_rect(rect, highlight_color_, highlight_color_.unused);
+ 	}
+ 	graphics::blit_texture(texture_, x(), y());
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level.cpp	2016-07-07 21:54:30.226152560 +0200
+@@ -1648,10 +1648,10 @@ void level::draw_layer_solid(int layer,
+ 
+ 			solid.first->color.set_as_current_color();
+ 			GLshort varray[] = {
+-			  area.x(), area.y(),
+-			  area.x() + area.w(), area.y(),
+-			  area.x(), area.y() + area.h(),
+-			  area.x() + area.w(), area.y() + area.h(),
++			  (GLshort)area.x(), (GLshort)area.y(),
++			  (GLshort)(area.x() + area.w()), (GLshort)area.y(),
++			  (GLshort)area.x(), (GLshort)(area.y() + area.h()),
++			  (GLshort)(area.x() + area.w()), (GLshort)(area.y() + area.h()),
+ 			};
+ #if defined(USE_GLES2)
+ 			gles2::manager gles2_manager(gles2::get_simple_shader());
+@@ -2146,7 +2146,7 @@ void level::calculate_lighting(int x, in
+ 
+ 		glClearColor(dark_color_.r()/255.0, dark_color_.g()/255.0, dark_color_.b()/255.0, dark_color_.a()/255.0);
+ 		glClear(GL_COLOR_BUFFER_BIT);
+-		const unsigned char color[] = { dark_color_.r(), dark_color_.g(), dark_color_.b(), dark_color_.a() };
++		const unsigned char color[] = { (unsigned char)dark_color_.r(), (unsigned char)dark_color_.g(), (unsigned char)dark_color_.b(), (unsigned char)dark_color_.a() };
+ 		foreach(const light* lt, lights) {
+ 			lt->draw(screen_area, color);
+ 		}
+@@ -2160,7 +2160,7 @@ void level::calculate_lighting(int x, in
+ 
+ 	const GLfloat tcarray[] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+ 	const GLfloat tcarray_rotated[] = { 0, 1, 1, 1, 0, 0, 1, 0 };
+-	GLfloat varray[] = { 0, h, 0, 0, w, h, w, 0 };
++	GLfloat varray[] = { 0, (GLfloat)h, 0, 0, (GLfloat)w, (GLfloat)h, (GLfloat)w, 0 };
+ #if defined(USE_GLES2)
+ 	gles2::active_shader()->prepare_draw();
+ 	gles2::active_shader()->shader()->vertex_array(2, GL_FLOAT, GL_FALSE, 0, varray);
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_object.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_object.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_object.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_object.cpp	2016-07-07 21:56:53.634079369 +0200
+@@ -176,8 +176,8 @@ void create_compiled_tiles_image()
+ 		const int dst_x = (itor->second%64) * BaseTileSize;
+ 		const int dst_y = (itor->second/64) * BaseTileSize;
+ 
+-		SDL_Rect src_rect = { src_x, src_y, BaseTileSize, BaseTileSize };
+-		SDL_Rect dst_rect = { dst_x, dst_y, BaseTileSize, BaseTileSize };
++		SDL_Rect src_rect = { (Sint16)src_x, (Sint16)src_y, (Uint16)BaseTileSize, (Uint16)BaseTileSize };
++		SDL_Rect dst_rect = { (Sint16)dst_x, (Sint16)dst_y, (Uint16)BaseTileSize, (Uint16)BaseTileSize };
+ 
+ 		SDL_BlitSurface(src.get(), &src_rect, s.get(), &dst_rect);
+ 	}
+@@ -237,8 +237,8 @@ void create_compiled_tiles_image()
+ 				const int dst_x = (dst_tile%64) * BaseTileSize;
+ 				const int dst_y = (dst_tile/64) * BaseTileSize;
+ 
+-				SDL_Rect src_rect = { src_x, src_y, BaseTileSize, BaseTileSize };
+-				SDL_Rect dst_rect = { dst_x, dst_y, BaseTileSize, BaseTileSize };
++				SDL_Rect src_rect = { (Sint16)src_x, (Sint16)src_y, (Uint16)BaseTileSize, (Uint16)BaseTileSize };
++				SDL_Rect dst_rect = { (Sint16)dst_x, (Sint16)dst_y, (Uint16)BaseTileSize, (Uint16)BaseTileSize };
+ 
+ 				SDL_BlitSurface(s.get(), &src_rect, sheets[sheet].get(), &dst_rect);
+ 			}
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_runner.cpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_runner.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_runner.cpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/level_runner.cpp	2016-07-07 21:59:55.372249312 +0200
+@@ -164,7 +164,7 @@ void transition_scene(level& lvl, screen
+ }
+ 
+ void fade_scene(const level& lvl, screen_position& screen_pos, float fade) {
+-	const SDL_Rect r = {0, 0, graphics::screen_width(), graphics::screen_height()};
++	const SDL_Rect r = {0, 0, (Uint16)graphics::screen_width(), (Uint16)graphics::screen_height()};
+ 	const SDL_Color c = {0,0,0,0};
+ 	graphics::draw_rect(r, c, 128*fade);
+ }
+@@ -190,7 +190,7 @@ void iris_scene(const level& lvl, screen
+ 	const point light_pos = player->midpoint();
+ 
+ 	if(amount >= 0.99) {
+-		SDL_Rect rect = {0, 0, graphics::screen_width(), graphics::screen_height()};
++		SDL_Rect rect = {0, 0, (Uint16)graphics::screen_width(), (Uint16)graphics::screen_height()};
+ 		graphics::draw_rect(rect, graphics::color_black());
+ 	} else {
+ 		draw_scene(lvl, screen_pos);
+@@ -202,27 +202,27 @@ void iris_scene(const level& lvl, screen
+ 		const int radius = radius_scale*radius_scale*500;
+ 		const int center_x = -screen_x + light_pos.x;
+ 		const int center_y = -screen_y + light_pos.y;
+-		SDL_Rect center_rect = {center_x - radius, center_y - radius, radius*2, radius*2 };
++		SDL_Rect center_rect = {(Sint16)(center_x - radius), (Sint16)(center_y - radius), (Uint16)(radius*2), (Uint16)(radius*2) };
+ 
+ 		if(center_rect.y > 0) {
+-			SDL_Rect top_rect = {0, 0, graphics::screen_width(), center_rect.y};
++			SDL_Rect top_rect = {0, 0, (Uint16)graphics::screen_width(), (Uint16)center_rect.y};
+ 			graphics::draw_rect(top_rect, graphics::color_black());
+ 		}
+ 
+ 		const int bot_rect_height = graphics::screen_height() - (center_rect.y + center_rect.h);
+ 		if(bot_rect_height > 0) {
+-			SDL_Rect bot_rect = {0, graphics::screen_height() - bot_rect_height, graphics::screen_width(), bot_rect_height};
++			SDL_Rect bot_rect = {0, (Sint16)(graphics::screen_height() - bot_rect_height), (Uint16)graphics::screen_width(), (Uint16)bot_rect_height};
+ 			graphics::draw_rect(bot_rect, graphics::color_black());
+ 		}
+ 
+ 		if(center_rect.x > 0) {
+-			SDL_Rect left_rect = {0, 0, center_rect.x, graphics::screen_height()};
++			SDL_Rect left_rect = {0, 0, (Uint16)center_rect.x, (Uint16)graphics::screen_height()};
+ 			graphics::draw_rect(left_rect, graphics::color_black());
+ 		}
+ 
+ 		const int right_rect_width = graphics::screen_width() - (center_rect.x + center_rect.w);
+ 		if(right_rect_width > 0) {
+-			SDL_Rect right_rect = {graphics::screen_width() - right_rect_width, 0, right_rect_width, graphics::screen_height()};
++			SDL_Rect right_rect = {(Sint16)(graphics::screen_width() - right_rect_width), 0, (Uint16)right_rect_width, (Uint16)graphics::screen_height()};
+ 			graphics::draw_rect(right_rect, graphics::color_black());
+ 		}
+ 
+@@ -277,7 +277,7 @@ void show_end_game()
+ 	const int ypos = graphics::screen_height()/2 - t.height()/2;
+ 	for(int n = 0; n <= msg.size(); ++n) {
+ 		const GLfloat percent = GLfloat(n)/GLfloat(msg.size());
+-		SDL_Rect rect = {0, 0, graphics::screen_width(), graphics::screen_height()};
++		SDL_Rect rect = {0, 0, (Uint16)graphics::screen_width(), (Uint16)graphics::screen_height()};
+ 		graphics::draw_rect(rect, graphics::color_black());
+ 		graphics::blit_texture(t, xpos, ypos, t.width()*percent, t.height(), 0.0,
+ 						       0.0, 0.0, percent, 1.0);
+diff -up frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/texture.hpp~ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/texture.hpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/texture.hpp~	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/texture.hpp	2016-07-07 20:32:36.560100936 +0200
+@@ -58,7 +58,7 @@ public:
+ 	unsigned int get_id() const;
+ 	static void set_current_texture(unsigned int id);
+ 	void set_as_current_texture() const;
+-	bool valid() const { return id_; }
++	bool valid() const { return id_ ? true : false; }
+ 
+ 	static texture get(const std::string& str, int options=0);
+ 	static texture get(const std::string& str, const std::string& algorithm);
