@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -22,6 +22,9 @@ Patch2:         %{name}-1.3-fonts.patch
 # Fix gcc6 build only fixes some of the narrowing conversion warnings, there
 # are too many, so we add -Wno-narrowing to the CXXFLAGS as a workaround
 Patch3:         %{name}-1.3-narrowing-conversion-fixes.patch
+# Fix comparison between pointer and integer errors
+# https://github.com/anura-engine/anura/commit/18ad198565f7a3280d991a5878316f6e5c9351d3
+Patch4:         %{name}-1.3-comparison.patch
 
 BuildRequires:  SDL-devel >= 1.2.7
 BuildRequires:  SDL_image-devel
@@ -55,13 +58,14 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # Fix locale file path
 sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
 
 
 %build
-make %{?_smp_mflags} \
+%make_build \
   BASE_CXXFLAGS="$RPM_OPT_FLAGS -fno-inline-functions -fthreadsafe-statics -Wno-narrowing"
 
 
@@ -136,6 +140,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Sat Mar 25 2017 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-7
+- Fix comparison between pointer and integer errors / fix FTBFS
+
 * Thu Jul  7 2016 Hans de Goede <j.w.r.degoede@gmail.com> - 1.3.3-6
 - Fix building with gcc6 / fix FTBFS
 

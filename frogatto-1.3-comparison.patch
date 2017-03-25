@@ -1,0 +1,24 @@
+diff -dur frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d.orig/src/surface_cache.cpp frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/surface_cache.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d.orig/src/surface_cache.cpp	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/surface_cache.cpp	2017-03-25 12:48:59.682281227 +0100
+@@ -116,7 +116,7 @@
+ 	}
+ #endif // ANDROID
+ 	//std::cerr << "loading image '" << fname << "'\n";
+-	if(surf.get() == false || surf->w == 0) {
++	if(surf.get() == NULL || surf->w == 0) {
+ 		if(key != "") {
+ 			std::cerr << "failed to load image '" << key << "'\n";
+ 		}
+diff -dur frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d.orig/src/variant.cpp frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/variant.cpp
+--- frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d.orig/src/variant.cpp	2013-08-21 22:34:37.000000000 +0200
++++ frogatto-a7ef3bfa0c32df4852bf057fab969c1a080edf4d/src/variant.cpp	2017-03-25 11:56:39.383302278 +0100
+@@ -685,7 +685,7 @@
+ 	case VARIANT_TYPE_CALLABLE:
+ 		return callable_ != NULL;
+ 	case VARIANT_TYPE_LIST:
+-		return !list_->size() == 0;
++		return list_->size() != 0;
+ 	case VARIANT_TYPE_MAP:
+ 		return !map_->elements.empty();
+ 	case VARIANT_TYPE_STRING:
