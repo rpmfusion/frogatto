@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -25,6 +25,10 @@ Patch3:         %{name}-1.3-narrowing-conversion-fixes.patch
 # Fix comparison between pointer and integer errors
 # https://github.com/anura-engine/anura/commit/18ad198565f7a3280d991a5878316f6e5c9351d3
 Patch4:         %{name}-1.3-comparison.patch
+
+# We have problems with these architectures
+# https://lists.rpmfusion.org/archives/list/rpmfusion-developers@lists.rpmfusion.org/thread/LQXC5S37G6S4NRZNB7KKGD2Q25OKXSEV/
+ExcludeArch:    ppc64 ppc64le aarch64
 
 BuildRequires:  SDL-devel >= 1.2.7
 BuildRequires:  SDL_image-devel
@@ -140,6 +144,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Tue Mar 28 2017 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-8
+- Workaround not to build for ppc64, ppc64le and aarch64
+
 * Sat Mar 25 2017 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-7
 - Fix comparison between pointer and integer errors / fix FTBFS
 
