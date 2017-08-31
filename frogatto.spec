@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -144,6 +144,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Thu Aug 31 2017 RPM Fusion Release Engineering <kwizart@rpmfusion.org> - 1.3.3-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Tue Mar 28 2017 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-8
 - Workaround not to build for ppc64, ppc64le and aarch64
 
