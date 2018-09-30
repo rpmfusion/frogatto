@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -144,6 +144,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 
 %changelog
+* Sun Sep 30 2018 Sérgio Basto <sergio@serjux.com> - 1.3.3-13
+- Rebuild for glew 2.1.0
+
 * Sun Aug 19 2018 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.3.3-12
 - Rebuilt for Fedora 29 Mass Rebuild binutils issue
 
