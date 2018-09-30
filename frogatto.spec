@@ -30,6 +30,7 @@ Patch4:         %{name}-1.3-comparison.patch
 # https://lists.rpmfusion.org/archives/list/rpmfusion-developers@lists.rpmfusion.org/thread/LQXC5S37G6S4NRZNB7KKGD2Q25OKXSEV/
 ExcludeArch:    ppc64 ppc64le aarch64
 
+BuildRequires:  gcc-c++
 BuildRequires:  SDL-devel >= 1.2.7
 BuildRequires:  SDL_image-devel
 BuildRequires:  SDL_mixer-devel
@@ -146,6 +147,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %changelog
 * Sun Sep 30 2018 Sérgio Basto <sergio@serjux.com> - 1.3.3-13
 - Rebuild for glew 2.1.0
+- Add BuildRequires: gcc-c++
 
 * Sun Aug 19 2018 RPM Fusion Release Engineering <leigh123linux@gmail.com> - 1.3.3-12
 - Rebuilt for Fedora 29 Mass Rebuild binutils issue
