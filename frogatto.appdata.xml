@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2018 Andrea Musuruane <musuruan@gmail.com> -->
+<component type="desktop">
+  <id>frogatto.desktop</id>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
+  <project_license>GPL-3.0 and proprietary</project_license>
+  <name>Frogatto &amp; Friends</name>
+  <summary>An old-school 2D platform game</summary>
+  <description>
+    <p>
+      An old-school 2D platform game, starring a certain quixotic frog. 
+      Frogatto has gorgeous, high-end pixel art, pumping arcade tunes, and
+      all the gameplay nuance of a classic console title. Run and jump over
+      pits and enemies. Grab enemies with your tongue, swallow them, and then
+      spit them out at other enemies as projectiles! Fight dangerous bosses,
+      and solve vexing puzzles. Collect coins and use them to buy upgrades
+      and new abilities in the store. Talk to characters in game, and work
+      to unravel Big Bad Milgram's plot against the townsfolk! 
+    </p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://frogatto.com/screenshot_imgs/v_1_3/airplane_boss.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://frogatto.com/screenshot_imgs/v_1_3/burning_stone.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://frogatto.com/screenshot_imgs/v_1_3/crevice_village.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://frogatto.com/</url>
+</component>
+

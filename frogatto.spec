@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        17%{?dist}
+Release:        18%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -13,6 +13,7 @@ Source0:        https://github.com/frogatto/frogatto/archive/%{commit}/%{name}-%
 Source1:        %{name}.sh
 Source2:        %{name}.desktop
 Source3:        %{name}.pod
+Source4:        %{name}.appdata.xml
 # Patch Makefile not to link lSDLmain
 Patch0:         %{name}-1.2-Makefile.patch
 # Boost no longer has separate non mt and -mt variants of its libs
@@ -25,6 +26,8 @@ Patch3:         %{name}-1.3-narrowing-conversion-fixes.patch
 # Fix comparison between pointer and integer errors
 # https://github.com/anura-engine/anura/commit/18ad198565f7a3280d991a5878316f6e5c9351d3
 Patch4:         %{name}-1.3-comparison.patch
+# Fix building with Boost 1.70+
+Patch5:         %{name}-1.3-boost.patch
 
 # We have problems with these architectures
 # https://lists.rpmfusion.org/archives/list/rpmfusion-developers@lists.rpmfusion.org/thread/LQXC5S37G6S4NRZNB7KKGD2Q25OKXSEV/
@@ -43,6 +46,7 @@ BuildRequires:  boost-devel
 BuildRequires:  perl-podlators
 BuildRequires:  libicns-utils
 BuildRequires:  desktop-file-utils 
+BuildRequires:  libappstream-glib
 Requires:       hicolor-icon-theme
 Requires:       gnu-free-mono-fonts
 
@@ -64,6 +68,7 @@ in game, and work to unravel Big Bad Milgram's plot against the townsfolk!
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p0
 
 # Fix locale file path
 sed -i 's!"./locale/"!"%{_datadir}/locale/"!' src/i18n.cpp
@@ -116,35 +121,35 @@ pod2man --section=6 \
   -date="July 13th, 2010" \
   %{SOURCE3} > %{buildroot}%{_mandir}/man6/%{name}.6
 
+# Install AppData file
+install -d %{buildroot}%{_datadir}/metainfo
+install -p -m 644 %{SOURCE4} %{buildroot}%{_datadir}/metainfo
+appstream-util validate-relax --nonet \
+  %{buildroot}/%{_datadir}/metainfo/*.appdata.xml
+
+
 %find_lang %{name}
 
 
-%post
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
-
-
-%postun
-if [ $1 -eq 0 ] ; then
-    touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-fi
-
-
-%posttrans
-gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
-
-
 %files -f %{name}.lang
-%doc modules/%{name}/CHANGELOG LICENSE
+%doc modules/%{name}/CHANGELOG
+%license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_libexecdir}/%{name}
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/metainfo/%{name}.appdata.xml
 %{_mandir}/man6/%{name}.6*
 
 
 %changelog
+* Fri Jun 05 2020 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-18
+- Added a patch from FreeBSD to build with Boost 1.70+
+- Added AppData file
+- Added license tag
+- Removed desktop scriptlets
+
 * Thu Jun 04 2020 Leigh Scott <leigh123linux@gmail.com> - 1.3.3-17
 - Rebuilt for Boost 1.73
 
