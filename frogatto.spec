@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        23%{?dist}
+Release:        24%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -144,6 +144,9 @@ appstream-util validate-relax --nonet \
 
 
 %changelog
+* Mon Feb 14 2022 Sérgio Basto <sergio@serjux.com> - 1.3.3-24
+- Rebuid for glew-2.2.0
+
 * Thu Feb 10 2022 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.3.3-23
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
