@@ -1,0 +1,38 @@
+From 7de047326ad5f91da0a1faa62e25eaa163cdda36 Mon Sep 17 00:00:00 2001
+From: Ingo van Lil <inguin@gmx.de>
+Date: Mon, 25 Apr 2022 07:29:56 +0200
+Subject: [PATCH 1/2] Work around surface double free with sdl12-compat
+
+The SDL 1.2 compatibility library disregards the surface's refcount
+field in SDL_FreeSurface, causing a double free in Frogatto. A bugfix is
+available in commit [1], but not yet released. Work around by handling
+the refcount ourselves.
+
+This patch can be removed when RPMs for sdl12-compat newer than 1.2.52
+are available, but it should be safe even then.
+
+[1] https://github.com/libsdl-org/sdl12-compat/commit/201670ec
+---
+ src/surface.hpp | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/surface.hpp b/src/surface.hpp
+index 216051f54..ec26d76ee 100644
+--- a/src/surface.hpp
++++ b/src/surface.hpp
+@@ -42,7 +42,11 @@ private:
+ 		void operator()(SDL_Surface *surf) const
+ 		{
+ 			if (surf != NULL) {
+-				 SDL_FreeSurface(surf);
++				if (surf->refcount > 1) {
++					--surf->refcount;
++				} else {
++					SDL_FreeSurface(surf);
++				}
+ 			}
+ 		}
+ 	};
+-- 
+2.35.1
+

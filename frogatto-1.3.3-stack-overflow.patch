@@ -1,0 +1,26 @@
+From e9308875d2d8b552722b3b13fbf67cf630c3e8d1 Mon Sep 17 00:00:00 2001
+From: Ingo van Lil <inguin@gmx.de>
+Date: Mon, 25 Apr 2022 08:15:52 +0200
+Subject: [PATCH 2/2] Fix stack overflow in base64 test
+
+Reserve space for terminating 0 character in destination string.
+---
+ src/level_object.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/level_object.cpp b/src/level_object.cpp
+index 097b97a3c..13ff75992 100644
+--- a/src/level_object.cpp
++++ b/src/level_object.cpp
+@@ -908,7 +908,7 @@ UNIT_TEST(level_object_base64)
+ 	const char* s = "4O0";
+ 	const char* s2 = s + strlen(s);
+ 	const int num = base64_unencode(s, s2);
+-	char buf[3];
++	char buf[4];
+ 	base64_encode(num, buf, 3);
+ 	CHECK_EQ(buf[0], s[0]);
+ 	CHECK_EQ(buf[1], s[1]);
+-- 
+2.35.1
+
