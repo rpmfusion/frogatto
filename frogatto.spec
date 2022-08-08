@@ -3,7 +3,7 @@
 
 Name:           frogatto
 Version:        1.3.3
-Release:        25%{?dist}
+Release:        26%{?dist}
 Summary:        An old-school 2D platform game
 
 # Artwork and music not released under an open license
@@ -156,6 +156,10 @@ appstream-util validate-relax --nonet \
 
 
 %changelog
+* Mon Aug 08 2022 RPM Fusion Release Engineering <sergiomb@rpmfusion.org> - 1.3.3-26
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild and ffmpeg
+  5.1
+
 * Tue Apr 26 2022 Andrea Musuruane <musuruan@gmail.com> - 1.3.3-25
 - Fix segfault at startup (BZ #6252). Thanks to Ingo van Lil.
 - Use %%set_build_flags macro
